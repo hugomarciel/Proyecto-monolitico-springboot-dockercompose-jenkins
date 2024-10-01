@@ -4,7 +4,10 @@ import MINGESO.Proyecto_monolitico.entities.EmployeeEntity;
 import org.springframework.stereotype.Service;
 
 @Service
+
+
 public class OfficeHRMService {
+
    // calcula el salario anual del employee
    public int getAnnualSalary(EmployeeEntity employee) {
       int annualSalary = 0;
@@ -61,3 +64,4 @@ public class OfficeHRMService {
    }
 
 }
+
