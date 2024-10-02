@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 
 
-public class JustificacionsEntity {
+public class JustificationsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
