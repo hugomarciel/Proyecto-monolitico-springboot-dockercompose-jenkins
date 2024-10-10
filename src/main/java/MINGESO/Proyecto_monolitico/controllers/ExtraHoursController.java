@@ -51,4 +51,9 @@ public class ExtraHoursController {
         var isDeleted = extraHoursService.deleteExtraHour(id);
         return ResponseEntity.noContent().build();
     }
+    @PostMapping("/calculate/{year}/{month}")
+    public ResponseEntity<Void> calculateExtraHours(@PathVariable int year, @PathVariable int month) {
+        extraHoursService.calculateAndSaveExtraHours(month, year);
+        return ResponseEntity.ok().build();
+    }
 }

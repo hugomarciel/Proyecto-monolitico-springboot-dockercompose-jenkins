@@ -6,11 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "extraHours")
+@Table(name = "lateArrivals")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExtraHoursEntity {
+public class LateArrivalsEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +20,5 @@ public class ExtraHoursEntity {
     private String rut;
     private int month;
     private int year;
-    private int numExtraHours;
+    private int numLateMinutes;
 }
-

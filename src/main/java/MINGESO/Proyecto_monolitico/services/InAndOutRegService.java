@@ -20,6 +20,10 @@ public class InAndOutRegService {
     @Autowired
     private InAndOutRegRepository inAndOutRegRepository; // Eliminar 'static'
 
+    public List<InAndOutRegEntity> getAllInAndOutRegsByMonthAndYear(int month, int year) {
+        return inAndOutRegRepository.findByMonthAndYear(month, year);
+    }
+
     public List<InAndOutRegEntity> importData(String filePath) { // Eliminar 'static'
         List<InAndOutRegEntity> inAndOutRegs = new ArrayList<>();
 
