@@ -16,7 +16,7 @@ public class LateArrivalsController {
     @PostMapping("/calculate/{year}/{month}")
     public ResponseEntity<Void> calculateMinuts(@PathVariable int year, @PathVariable int month) {
         // Llamar al servicio para calcular y guardar los minutos de atraso
-        lateArrivalsService.calculateAndSaveLateArrivals(month, year);
+        lateArrivalsService.calculateAndSaveLateArrivals(year, month);
         return ResponseEntity.ok().build(); // Devuelve un 200 OK si la operación fue exitosa
     }
 }

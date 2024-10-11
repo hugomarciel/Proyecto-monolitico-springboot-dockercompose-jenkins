@@ -11,7 +11,9 @@ import java.util.List;
 @Repository
 public interface ExtraHoursRepository extends JpaRepository<ExtraHoursEntity, Long> {
     public List<ExtraHoursEntity> findByRut(String rut);
-    @Query(value = "SELECT * FROM extra_hours WHERE extra_hours.rut = :rut AND YEAR(extra_hours.date)=:year AND MONTH(extra_hours.date)=:month", nativeQuery = true)
+    @Query(value = "SELECT * FROM extra_hours WHERE extra_hours.rut = :rut AND extra_hours.year = :year AND extra_hours.month = :month", nativeQuery = true)
     List<ExtraHoursEntity> getExtraHoursByRutYearMonth(@Param("rut") String rut, @Param("year") int year, @Param("month") int month);
+
+
 
 }

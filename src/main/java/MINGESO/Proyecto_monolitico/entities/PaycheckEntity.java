@@ -18,12 +18,19 @@ public class PaycheckEntity {
     private Long id;
 
     private String rut;
-    private int year;
-    private int month;
-    private int monthlySalary;
-    private int salaryBonus;
-    private int childrenBonus;
+    private String name;
+    private String lastName;
+    private String category;
+    private int servicesYears;
+    private int monthSalary;
+    private double servicesYearsBonus;
     private int extraHoursBonus;
+    private int discounts;
+    private int grossSalary;
+    private int forecastQuote;
+    private int healthQuote;
+    //private int childrenBonus;
+
     private int totalSalary;
 }
 

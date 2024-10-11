@@ -21,7 +21,7 @@ public class PaycheckController {
         return ResponseEntity.ok(paychecks);
     }
 
-    @GetMapping("/calculate")
+    @GetMapping("/calculate/{year}/{month}")
     public ResponseEntity<Void> calculatePaychecks(@RequestParam("year") int year, @RequestParam("month") int month) {
         paycheckService.calculatePaychecks(year, month);
         return ResponseEntity.noContent().build();

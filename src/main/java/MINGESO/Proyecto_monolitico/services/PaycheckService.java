@@ -13,51 +13,58 @@ import java.util.List;
 public class PaycheckService {
     @Autowired
     PaycheckRepository paycheckRepository;
+
     @Autowired
     EmployeeService employeeService;
+
     @Autowired
     OfficeHRMService officeHRMService;
 
     @Autowired
     ExtraHoursService extraHoursService;
-    public ArrayList<PaycheckEntity> getPaychecks(){
+
+    public ArrayList<PaycheckEntity> getPaychecks() {
         return (ArrayList<PaycheckEntity>) paycheckRepository.findAll();
     }
 
-    public PaycheckEntity savePaycheck(PaycheckEntity paycheck){
+    public PaycheckEntity savePaycheck(PaycheckEntity paycheck) {
         return paycheckRepository.save(paycheck);
     }
 
-    public ArrayList<PaycheckEntity> getPaychecksByYearMonth(Integer year, Integer month){
-        return (ArrayList<PaycheckEntity>) paycheckRepository.getPaychecksByYearMonth(year,month);
+    public ArrayList<PaycheckEntity> getPaychecksByYearMonth(Integer year, Integer month) {
+        return (ArrayList<PaycheckEntity>) paycheckRepository.getPaychecksByYearMonth(year, month);
     }
 
-    public Boolean calculatePaychecks(int year, int month){
+    public Boolean calculatePaychecks(int year, int month) {
         List<EmployeeEntity> employees = employeeService.getEmployees();
 
         for (EmployeeEntity employee : employees) {
             PaycheckEntity paycheck = new PaycheckEntity();
             paycheck.setRut(employee.getRut());
-            paycheck.setYear(year);
-            paycheck.setMonth(month);
-            paycheck.setMonthlySalary(employee.getSalary());
-
-            int salaryBonus = officeHRMService.getSalaryBonus(employee);
-            paycheck.setSalaryBonus(salaryBonus);
-
-            int childrenBonus = officeHRMService.getChildrenBonus(employee);
-            paycheck.setChildrenBonus(childrenBonus);
-
-            int numExtraHours = extraHoursService.getTotalExtraHoursByRutYearMonth(employee.getRut(), year, month);
-            int extraHoursBonus = officeHRMService.getExtraHoursBonus(employee,numExtraHours);
+            paycheck.setName(employee.getNames());  // Cambiado
+            paycheck.setLastName(employee.getLastNames());  // Cambiado
+            paycheck.setCategory(employee.getCategory());  // Cambiado
+            int servicesYears = officeHRMService.calculateYearsOfService(employee);
+            paycheck.setServicesYears(servicesYears);
+            int monthlySalary = officeHRMService.getMonthlySalary(employee);
+            paycheck.setMonthSalary(monthlySalary);
+            double yearsServicesBonus = officeHRMService.calculateYearsServiceBonus(employee);
+            paycheck.setServicesYearsBonus(yearsServicesBonus);
+            int extraHoursBonus = extraHoursService.getTotalExtraHoursAmountByRutYearMonth(employee.getRut(), year, month);
             paycheck.setExtraHoursBonus(extraHoursBonus);
 
-            paycheck.setTotalSalary(employee.getSalary() + salaryBonus + childrenBonus + extraHoursBonus);
 
-            paycheckRepository.save(paycheck);
+
+            // Calcular el salario total
+            //paycheck.setTotalSalary(
+            //        paycheck.getGrossSalary() +
+            //                paycheck.getServicesYearsBonus() +
+             //               paycheck.getExtraHoursBonus()
+            //);
+
+            paycheckRepository.save(paycheck);  // Guardar el cheque de pago
         }
 
         return true;
     }
-
 }

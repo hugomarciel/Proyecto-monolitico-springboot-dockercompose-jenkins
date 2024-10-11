@@ -1,19 +1,40 @@
 package MINGESO.Proyecto_monolitico.services;
 
+import MINGESO.Proyecto_monolitico.entities.CategorysEntity;
 import MINGESO.Proyecto_monolitico.entities.EmployeeEntity;
+import MINGESO.Proyecto_monolitico.entities.ExtraHoursEntity;
+import MINGESO.Proyecto_monolitico.repositories.CategoryRepository;
+import MINGESO.Proyecto_monolitico.repositories.ExtraHoursRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.List;
+
 
 @Service
 
 
 public class OfficeHRMService {
+   @Autowired
+   CategoryRepository categoryRepository;
+
+   @Autowired
+   ExtraHoursRepository extraHoursRepository;
+
+   @Autowired
+   AutorizationsService autorizationsService;
+
+   //@Autowired
+   //CategorysEntity categorysEntity;
+
 
    // calcula el salario anual del employee
-   public int getAnnualSalary(EmployeeEntity employee) {
-      int annualSalary = 0;
-      annualSalary = employee.getSalary() * 12;
-      return annualSalary;
-   }
+  // public int getAnnualSalary(EmployeeEntity employee) {
+    //  int annualSalary = 0;
+      //annualSalary = employee.getSalary() * 12;
+      //return annualSalary;
+   //}
 
    // Calcula bonificacion según monto del sueldo
    // < 2.000: 10% del monto de su sueldo; caso contrario 20%
@@ -61,6 +82,72 @@ public class OfficeHRMService {
       }
 
       return extraHoursBonus;
+   }
+   public int calculateYearsOfService(EmployeeEntity employee) {
+      if (employee.getEntryDate() == null) {
+         return 0; // Si no hay fecha de entrada, retorna 0
+      }
+
+      LocalDate entryDate = employee.getEntryDate();
+      LocalDate currentDate = LocalDate.now(); // Fecha actual
+
+      // Calcula el periodo entre las dos fechas
+      Period period = Period.between(entryDate, currentDate);
+      return period.getYears(); // Retorna solo los años de servicio
+   }
+   // Método para obtener el sueldo fijo mensual según la categoría
+   public int getMonthlySalary(EmployeeEntity employee) {
+      CategorysEntity categoryEntity = categoryRepository.findByCategory(employee.getCategory());
+      if (categoryEntity != null) {
+         return categoryEntity.getSalary(); // Retorna el sueldo fijo mensual de la categoría
+      }
+      return 0; // Retorna 0 si no se encuentra la categoría
+   }
+
+   // Método para calcular el bono por años de servicio
+   public double calculateYearsServiceBonus(EmployeeEntity employee) {
+      int yearsOfService = calculateYearsOfService(employee);
+      double monthlySalary = getMonthlySalary(employee); // Sueldo fijo mensual
+
+      if (yearsOfService < 5) {
+         return 0; // 0% bono
+      } else if (yearsOfService < 10) {
+         return monthlySalary * 0.05; // 5% bono
+      } else if (yearsOfService < 15) {
+         return monthlySalary * 0.08; // 8% bono
+      } else if (yearsOfService < 20) {
+         return monthlySalary * 0.11; // 11% bono
+      } else if (yearsOfService < 25) {
+         return monthlySalary * 0.14; // 14% bono
+      } else {
+         return monthlySalary * 0.17; // 17% bono
+      }
+   }
+   // Método para calcular el monto a pagar por horas extras autorizadas
+   public double calculateExtraHoursPayment(EmployeeEntity employee, int year, int month) {
+      // 1. Obtener el número de horas extras realizadas
+      List<ExtraHoursEntity> extraHoursList = extraHoursRepository.getExtraHoursByRutYearMonth(employee.getRut(), year, month);
+
+      // Calcular el total de horas extras
+      int totalExtraHours = extraHoursList.stream()
+              .mapToInt(ExtraHoursEntity::getNumExtraHours)
+              .sum();
+
+      // 2. Verificar si las horas extras están autorizadas
+      int authorizedExtraHours = autorizationsService.getAuthorizedExtraHours(employee.getRut(), year, month);
+
+      // 3. Determinar las horas a pagar (solo las autorizadas)
+      int payableExtraHours = Math.min(totalExtraHours, authorizedExtraHours);
+
+      // 4. Obtener la tarifa de horas extras según la categoría
+      CategorysEntity categoryEntity = categoryRepository.findByCategory(employee.getCategory());
+      if (categoryEntity == null) {
+         return 0; // Si no hay categoría, no se paga nada
+      }
+      double extraHourRate = categoryEntity.getExtraHourRate();
+
+      // 5. Calcular el monto a pagar por las horas extras autorizadas
+      return payableExtraHours * extraHourRate;
    }
 
 }

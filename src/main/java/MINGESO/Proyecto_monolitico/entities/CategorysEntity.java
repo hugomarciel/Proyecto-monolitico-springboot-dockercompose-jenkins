@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoriesEntity {
+public class CategorysEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
@@ -18,6 +18,6 @@ public class CategoriesEntity {
 
 
     private String category;  // Nombre de la categoría (A, B, C, etc.)
-    private Double salary;  // Sueldo fijo mensual según la categoría
-    private Double extraHourRate;  // Monto a pagar por hora extra según la categoría
+    private int salary;  // Sueldo fijo mensual según la categoría
+    private int extraHourRate;  // Monto a pagar por hora extra según la categoría
 }

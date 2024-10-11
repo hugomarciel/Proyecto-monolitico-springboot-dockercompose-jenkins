@@ -44,7 +44,7 @@ public class ExtraHoursService {
         return (List<ExtraHoursEntity>) extraHoursRepository.getExtraHoursByRutYearMonth(rut, year, month);
     }
 
-    public int getTotalExtraHoursByRutYearMonth(String rut, int year, int month) {
+    public int getTotalExtraHoursAmountByRutYearMonth(String rut, int year, int month) {
         List<ExtraHoursEntity> extraHours = extraHoursRepository.getExtraHoursByRutYearMonth(rut, year, month);
         int sumExtraHours = 0;
         for (ExtraHoursEntity extraHour : extraHours) {

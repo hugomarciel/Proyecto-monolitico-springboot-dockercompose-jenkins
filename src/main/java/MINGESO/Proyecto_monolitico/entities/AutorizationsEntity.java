@@ -19,6 +19,6 @@ public class AutorizationsEntity {
     private String rutEmployee;   // Rut del empleado que solicita la autorización
     private LocalDate date;       // Fecha de la autorización
     private String reason;        // Razón de la autorización
-    private boolean approved;     // Estado de aprobación
+    private int AuthorizedHours;     // Estado de aprobación
     private byte[] document;      // Documento de autorización firmado o anexo
 }
