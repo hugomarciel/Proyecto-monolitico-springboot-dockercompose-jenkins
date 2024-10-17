@@ -28,12 +28,10 @@ pipeline {
         stage('Push image to Docker Hub'){
             steps{
                 script{
-                   // Se usa la URL SSH para el repo y el ID de la credencial SSH
-                    checkout([$class: 'GitSCM', 
-                        branches: [[name: '*/master']], 
-                        userRemoteConfigs: [[
-                            url: 'git@github.com:hugomarciel/Proyecto-monolitico.git', 
-                            credentialsId: 'github-ssh' // Este ID es el que creaste en Jenkins
+                   withCredentials([string(credentialsId: 'dhpswid', variable: 'dhpsw')]) {
+                        bat 'docker login -u mtisw -p %dhpsw%'
+                   }
+                   bat 'docker push mtisw/book_service:latest'
                 }
             }
         }
