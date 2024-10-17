@@ -29,9 +29,12 @@ pipeline {
             steps{
                 script{
                    withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
-                        // Cambia la URL de tu repositorio para incluir el token
-                        def repoUrl = "https://%GITHUB_TOKEN%@github.com/hugomarciel/Proyecto-monolitico.git"
-                        checkout([$class: 'GitSCM', branches: [[name: '*/master']], userRemoteConfigs: [[url: repoUrl]]])
+                        // Configurar las credenciales en Git para este pipeline
+                        sh 'git config --global credential.helper store'
+                        sh 'echo "https://${GITHUB_TOKEN}:x-oauth-basic@github.com" > ~/.git-credentials'
+
+                        // Hacer push de la imagen a Docker Hub
+                        bat 'docker push hugomarciel/payroll-frontend:latest'
                 }
             }
         }
