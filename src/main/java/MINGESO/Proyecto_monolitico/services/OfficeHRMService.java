@@ -95,7 +95,7 @@ public class OfficeHRMService {
       Period period = Period.between(entryDate, currentDate);
       return period.getYears(); // Retorna solo los años de servicio
    }
-   // Método para obtener el sueldo fijo mensual según la categoría
+   // Comentario jueves 17 de octubre
    public int getMonthlySalary(EmployeeEntity employee) {
       CategorysEntity categoryEntity = categoryRepository.findByCategory(employee.getCategory());
       if (categoryEntity != null) {
