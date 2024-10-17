@@ -6,7 +6,7 @@ pipeline {
     stages{
         stage('Build maven'){
             steps{
-                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/hugomarciel/payroll-frontend']])
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/hugomarciel/Proyecto-monolitico.git']])
                 bat 'mvn clean package'
             }
         }
