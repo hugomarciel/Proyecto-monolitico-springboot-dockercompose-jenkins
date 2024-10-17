@@ -21,7 +21,7 @@ pipeline {
         stage('Build docker image'){
             steps{
                 script{
-                    bat 'docker build --build-arg VITE_PAYROLL_BACKEND_SERVER=18.116.68.206 --build-arg VITE_PAYROLL_BACKEND_PORT=8090 -t hugomarciel/payroll-frontend:latest1 .'
+                    bat 'docker build --no-cache -t hugomarciel/payroll-backend:latest .'
                 }
             }
         }
