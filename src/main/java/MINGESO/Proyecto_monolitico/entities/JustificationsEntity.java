@@ -21,6 +21,5 @@ public class JustificationsEntity {
     private String rutEmployee;
     private LocalDate date;
     private String motivation;
-    private boolean aproved;
     private byte[] document;
 }

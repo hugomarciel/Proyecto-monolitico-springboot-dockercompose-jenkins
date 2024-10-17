@@ -99,6 +99,9 @@ public class OfficeHRMService {
    public int getMonthlySalary(EmployeeEntity employee) {
       CategorysEntity categoryEntity = categoryRepository.findByCategory(employee.getCategory());
       if (categoryEntity != null) {
+         // Imprimir la categoría encontrada y su sueldo
+         System.out.println("Categoría encontrada: " + categoryEntity.getCategory() + ", Sueldo: " + categoryEntity.getSalary());
+
          return categoryEntity.getSalary(); // Retorna el sueldo fijo mensual de la categoría
       }
       return 0; // Retorna 0 si no se encuentra la categoría

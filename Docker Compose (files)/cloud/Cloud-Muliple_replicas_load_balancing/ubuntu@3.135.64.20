@@ -1,0 +1,135 @@
+version: "3.8"
+
+services:
+  # Frontend services
+  frontend1:
+    image: hugomarciel/payroll-frontend:latest
+    #env_file: .env
+    networks:
+      - frontend-network
+
+  frontend2:
+    image: hugomarciel/payroll-frontend:latest
+    env_file: .env
+    networks:
+      - frontend-network
+
+  frontend3:
+    image: hugomarciel/payroll-frontend:latest
+    env_file: .env
+    networks:
+      - frontend-network
+
+  # Backend services
+  backend1:
+    image: hugomarciel/payroll-backend:latest
+    environment:
+      - DB_HOST=3.135.64.20  
+    networks:
+      - backend-network
+
+  backend2:
+    image: hugomarciel/payroll-backend:latest
+    environment:
+      - DB_HOST=3.135.64.20  
+    networks:
+      - backend-network
+
+  backend3:
+    image: hugomarciel/payroll-backend:latest
+    environment:
+      - DB_HOST=3.135.64.20  
+    networks:
+      - backend-network
+
+  # Nginx for frontend load balancing
+  nginx-frontend:
+    image: nginx:latest
+    ports:
+      - "8070:80"
+    volumes:
+      - ./nginx-frontend.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - frontend1
+      - frontend2
+      - frontend3
+    networks:
+      - frontend-network
+
+  # Nginx for backend load balancing
+  nginx-backend:
+    image: nginx:latest
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./nginx-backend.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - backend1
+      - backend2
+      - backend3
+    networks:
+      - backend-network
+
+  # Database services
+  db1:
+    container_name: dbpayroll1
+    image: hugomarciel/db-payroll:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: dbpayroll
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    deploy:
+      restart_policy:
+        condition: on-failure
+    networks:
+      - backend-network
+
+  db2:
+    container_name: dbpayroll2
+    image: hugomarciel/db-payroll:latest
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: dbpayroll
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    deploy:
+      restart_policy:
+        condition: on-failure
+    networks:
+      - backend-network
+
+  db3:
+    container_name: dbpayroll3
+    image: hugomarciel/db-payroll:latest
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: dbpayroll
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    deploy:
+      restart_policy:
+        condition: on-failure
+    networks:
+      - backend-network
+
+  # Nginx for database load balancing
+  nginx-database:
+    image: nginx:latest
+    ports:
+      - "5435:5432"  # Cambia el puerto si es necesario
+    volumes:
+      - ./nginx-database.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - db1
+      - db2
+      - db3
+    networks:
+      - backend-network
+
+networks:
+  frontend-network:
+  backend-network:

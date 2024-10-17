@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+  frontend:
+    container_name: payroll-frontend
+    image: hugomarciel/payroll-frontend:latest
+    environment:
+      VITE_PAYROLL_BACKEND_SERVER: 3.135.60.24
+      VITE_PAYROLL_BACKEND_PORT: 8090
+    ports:
+      - "8070:80"
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  backend:
+    container_name: payroll-backend
+    image: hugomarciel/payroll-backend:latest
+    ports:
+      - "8090:8090"
+    environment:
+      DB_HOST: dbpayroll
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  db:
+    container_name: dbpayroll
+    image: hugomarciel/db-payroll:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: dbpayroll
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    deploy:
+      restart_policy:
+
+        condition: on-failure

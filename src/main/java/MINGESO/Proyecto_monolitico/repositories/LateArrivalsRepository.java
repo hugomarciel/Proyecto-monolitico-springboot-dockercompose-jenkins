@@ -12,6 +12,7 @@ import java.util.List;
 public interface LateArrivalsRepository extends JpaRepository<LateArrivalsEntity, Long> {
     public List<LateArrivalsEntity> findByRut(String rut);
 
-    @Query(value = "SELECT * FROM late_arrivals WHERE late_arrivals.rut = :rut AND YEAR(late_arrivals.date)=:year AND MONTH(late_arrivals.date)=:month", nativeQuery = true)
+    @Query(value = "SELECT * FROM late_arrivals WHERE late_arrivals.rut = :rut AND late_arrivals.year = :year AND late_arrivals.month = :month", nativeQuery = true)
     List<LateArrivalsEntity> getLateArrivalsByRutYearMonth(@Param("rut") String rut, @Param("year") int year, @Param("month") int month);
+
 }

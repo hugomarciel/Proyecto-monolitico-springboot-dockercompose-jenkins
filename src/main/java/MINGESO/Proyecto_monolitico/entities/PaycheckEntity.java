@@ -21,16 +21,18 @@ public class PaycheckEntity {
     private String name;
     private String lastName;
     private String category;
+    private int month;
+    private int year;
     private int servicesYears;
     private int monthSalary;
     private double servicesYearsBonus;
     private int extraHoursBonus;
-    private int discounts;
-    private int grossSalary;
-    private int forecastQuote;
-    private int healthQuote;
-    //private int childrenBonus;
+    private double discounts;
+    private double grossSalary;
+    private double forecastQuote;
+    private double healthQuote;
+    private int childrenBonus;
 
-    private int totalSalary;
+    private double totalSalary;
 }
 

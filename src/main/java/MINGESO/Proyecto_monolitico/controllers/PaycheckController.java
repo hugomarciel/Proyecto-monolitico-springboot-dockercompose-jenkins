@@ -21,9 +21,18 @@ public class PaycheckController {
         return ResponseEntity.ok(paychecks);
     }
 
-    @GetMapping("/calculate/{year}/{month}")
-    public ResponseEntity<Void> calculatePaychecks(@RequestParam("year") int year, @RequestParam("month") int month) {
-        paycheckService.calculatePaychecks(year, month);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/calculate/{year}/{month}")
+    public ResponseEntity<String> calculatePaychecks(@PathVariable("year") int year, @PathVariable("month") int month) {
+        // Ejecutar el cálculo de los paychecks
+        boolean success = paycheckService.calculatePaychecks(year, month);
+
+        // Devolver respuesta en función del resultado
+        if (success) {
+            return ResponseEntity.ok("Planilla calculada exitosamente para " + month + "/" + year);
+        } else {
+            return ResponseEntity.status(500).body("Error al calcular la planilla para " + month + "/" + year);
+        }
     }
+
+
 }
