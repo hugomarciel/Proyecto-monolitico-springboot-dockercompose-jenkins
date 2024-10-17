@@ -23,7 +23,7 @@ pipeline {
         stage('Push image to Docker Hub'){
             steps{
                 script{
-                   withCredentials([string(credentialsId: 'dhpswidd', variable: 'dhpsw')]) {
+                   withCredentials([string(credentialsId: 'administrador', variable: 'dhpsw')]) {
                         bat 'docker login -u hugomarciel -p %dhpsw%'
                    }
                    bat 'docker push hugomarciel/payroll-backend:latest'
