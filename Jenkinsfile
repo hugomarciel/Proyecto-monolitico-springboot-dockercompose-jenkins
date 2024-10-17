@@ -28,13 +28,12 @@ pipeline {
         stage('Push image to Docker Hub'){
             steps{
                 script{
-                   withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
-                        // Configurar las credenciales en Git para este pipeline
-                        sh 'git config --global credential.helper store'
-                        sh 'echo "https://${GITHUB_TOKEN}:x-oauth-basic@github.com" > ~/.git-credentials'
-
-                        // Hacer push de la imagen a Docker Hub
-                        bat 'docker push hugomarciel/payroll-frontend:latest'
+                   // Se usa la URL SSH para el repo y el ID de la credencial SSH
+                    checkout([$class: 'GitSCM', 
+                        branches: [[name: '*/master']], 
+                        userRemoteConfigs: [[
+                            url: 'git@github.com:hugomarciel/Proyecto-monolitico.git', 
+                            credentialsId: 'github-ssh' // Este ID es el que creaste en Jenkins
                 }
             }
         }
