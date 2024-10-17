@@ -29,9 +29,9 @@ pipeline {
             steps{
                 script{
                    withCredentials([string(credentialsId: 'dhpswid', variable: 'dhpsw')]) {
-                        bat 'docker login -u mtisw -p %dhpsw%'
+                        bat 'docker login -u hugomarciel -p %dhpsw%'
                    }
-                   bat 'docker push mtisw/book_service:latest'
+                   bat 'docker push hugomarciel/payroll-backend:latest'
                 }
             }
         }
